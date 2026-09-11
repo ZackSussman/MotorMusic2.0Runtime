@@ -55,8 +55,7 @@ class MotorMusicToken implements IToken {
     startIndex: number;
 
     constructor(ruleName: String, startIndex: number) {
-        //this.scopes = ruleName.toLowerCase() + ".MotorMusic";
-        this.scopes = "test";
+        this.scopes = ruleName.toLowerCase() + ".MotorMusic";
         this.startIndex = startIndex;
     }
 }
