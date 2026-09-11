@@ -143,6 +143,12 @@ export function tokensForLine(input: string, state : MotorMusicState): monaco.la
                 tokenTypeName = "unrecognized";
             }
             let myToken = new MotorMusicToken(tokenTypeName, token.column);
+            console.log({
+                text: token.text,
+                type: token.type,
+                symbolicName: lexer.symbolicNames[token.type],
+                tokenTypeName: tokenTypeName
+            });
             myTokens.push(myToken);   
         }
 
