@@ -79,10 +79,3 @@ function makeProcessVisual(globalRuntimeData) {
     }
     return processVisual;
 }
-
-
-export function initializeGlobalRuntime(globalRuntimeData) {
-    return {
-        processVisual: makeProcessVisual(globalRuntimeData)
-    };
-}
