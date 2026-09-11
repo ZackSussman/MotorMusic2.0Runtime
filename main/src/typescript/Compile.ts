@@ -71,11 +71,9 @@ function parse(input : string, errors : Error[]) {
 
 import {ParseTreeWalker} from "antlr4";
 
-function makeProcessVisual(globalRuntimeData) {
-    function processVisual(input : string) : Error[] {
-        let errors : Error[] = [];
-        let tree = parse(input, errors);
-        return errors;
-    }
-    return processVisual;
+
+export function processVisual(input : string) : Error[] {
+    let errors : Error[] = [];
+    let tree = parse(input, errors);
+    return errors;
 }
