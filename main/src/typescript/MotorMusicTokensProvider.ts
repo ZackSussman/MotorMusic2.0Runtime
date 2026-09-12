@@ -101,37 +101,16 @@ export function tokensForLine(input: string, state : MotorMusicState): monaco.la
             state.parenthesisDepth += 1;
             state.bracketContextFrameTypeIndicators.push(true);
         }
-        else if (token.text == "[") {
-            state.bracketDepth += 1;
-        }
- 
  
         if (token == null || token.type == EOF) {
             done = true
         } else {
             var tokenTypeName;
-            if (CONTEXT_SENSITIVE_TOKENS.includes(token.text) && state.bracketContextFrameTypeIndicators.length > 0) {
-                //parenthesis case
-                if (state.bracketContextFrameTypeIndicators.at(-1)) {
-                    tokenTypeName = lexer.symbolicNames[token.type] + "p" +  (state.parenthesisDepth % 3).toString();
-                }
-                //curly case
-                else {
-                    tokenTypeName = lexer.symbolicNames[token.type] + (state.curlyDepth % 3).toString();
-                }
-            }
-            else if (CONTEXT_SENSITIVE_TOKENS.includes(token.text)) {
-                //all context sensitive tokens must reside within {}, or ()
-                tokenTypeName = "unrecognized";
-            }
-            else if (token.text == "{" || token.text == "}") {
+            if (token.text == "{" || token.text == "}") {
                 tokenTypeName = lexer.symbolicNames[token.type] + (state.curlyDepth % 3).toString();
             }
             else if (token.text == "(" || token.text == ")") {
                 tokenTypeName = lexer.symbolicNames[token.type] + (state.parenthesisDepth % 3).toString();
-            }
-            else if (token.text == "[" || token.text == "]") {
-                tokenTypeName = lexer.symbolicNames[token.type] + (state.bracketDepth % 3).toString();
             }
             else {
                 tokenTypeName = lexer.symbolicNames[token.type];
@@ -151,12 +130,7 @@ export function tokensForLine(input: string, state : MotorMusicState): monaco.la
             });
             myTokens.push(myToken);   
         }
-
-        //process closing brace updates after processing of current token 
-        if (token.text == "]") {
-            state.bracketDepth -= 1;
-        }
-        else if (token.text == "}") {
+        if (token.text == "}") {
             state.curlyDepth -= 1;
             if (state.bracketContextFrameTypeIndicators.pop()) {
                 throw new Error("mismatch frame popping for curly brace");
