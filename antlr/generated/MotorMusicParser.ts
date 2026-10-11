@@ -19,42 +19,32 @@ type int = number;
 export default class MotorMusicParser extends Parser {
 	public static readonly WS = 1;
 	public static readonly NAMED_SYMBOL = 2;
-	public static readonly LCURLY = 3;
-	public static readonly RCURLY = 4;
-	public static readonly LPAREN = 5;
-	public static readonly RPAREN = 6;
-	public static readonly LANGLE = 7;
-	public static readonly RANGLE = 8;
-	public static readonly LSQBRACKET = 9;
-	public static readonly RSQBRACKET = 10;
-	public static readonly QUOTE = 11;
-	public static readonly RIGHTARROW = 12;
-	public static readonly UNRECOGNIZED = 13;
+	public static readonly NUMBER = 3;
+	public static readonly LCURLY = 4;
+	public static readonly RCURLY = 5;
+	public static readonly LPAREN = 6;
+	public static readonly RPAREN = 7;
+	public static readonly COLON = 8;
+	public static readonly UNRECOGNIZED = 9;
 	public static override readonly EOF = Token.EOF;
 	public static readonly RULE_compilationUnit = 0;
-	public static readonly RULE_coupling_list = 1;
-	public static readonly RULE_qualia = 2;
-	public static readonly RULE_experience = 3;
-	public static readonly RULE_experience_list = 4;
+	public static readonly RULE_momentSpecification = 1;
+	public static readonly RULE_specification_list = 2;
+	public static readonly RULE_specification = 3;
 	public static readonly literalNames: (string | null)[] = [ null, null, 
-                                                            null, "'{'", 
-                                                            "'}'", "'('", 
-                                                            "')'", "'<'", 
-                                                            "'>'", "'['", 
-                                                            "']'", "'\"'", 
-                                                            "'->'" ];
+                                                            null, null, 
+                                                            "'{'", "'}'", 
+                                                            "'('", "')'", 
+                                                            "':'" ];
 	public static readonly symbolicNames: (string | null)[] = [ null, "WS", 
                                                              "NAMED_SYMBOL", 
-                                                             "LCURLY", "RCURLY", 
-                                                             "LPAREN", "RPAREN", 
-                                                             "LANGLE", "RANGLE", 
-                                                             "LSQBRACKET", 
-                                                             "RSQBRACKET", 
-                                                             "QUOTE", "RIGHTARROW", 
+                                                             "NUMBER", "LCURLY", 
+                                                             "RCURLY", "LPAREN", 
+                                                             "RPAREN", "COLON", 
                                                              "UNRECOGNIZED" ];
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
-		"compilationUnit", "coupling_list", "qualia", "experience", "experience_list",
+		"compilationUnit", "momentSpecification", "specification_list", "specification",
 	];
 	public get grammarFileName(): string { return "MotorMusicParser.g4"; }
 	public get literalNames(): (string | null)[] { return MotorMusicParser.literalNames; }
@@ -75,26 +65,25 @@ export default class MotorMusicParser extends Parser {
 		let localctx: CompilationUnitContext = new CompilationUnitContext(this, this._ctx, this.state);
 		this.enterRule(localctx, 0, MotorMusicParser.RULE_compilationUnit);
 		try {
-			this.state = 14;
+			this.state = 12;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case -1:
 				localctx = new EmptyProgramContext(this, localctx);
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 10;
+				this.state = 8;
 				(localctx as EmptyProgramContext)._e = this.match(MotorMusicParser.EOF);
 				}
 				break;
-			case 5:
-			case 7:
-			case 9:
+			case 3:
+			case 6:
 				localctx = new NonEmptyProgramContext(this, localctx);
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 11;
-				(localctx as NonEmptyProgramContext)._e = this.experience(0);
-				this.state = 12;
+				this.state = 9;
+				(localctx as NonEmptyProgramContext)._e = this.specification(0);
+				this.state = 10;
 				this.match(MotorMusicParser.EOF);
 				}
 				break;
@@ -117,29 +106,31 @@ export default class MotorMusicParser extends Parser {
 		return localctx;
 	}
 	// @RuleVersion(0)
-	public coupling_list(): Coupling_listContext {
-		let localctx: Coupling_listContext = new Coupling_listContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 2, MotorMusicParser.RULE_coupling_list);
+	public momentSpecification(): MomentSpecificationContext {
+		let localctx: MomentSpecificationContext = new MomentSpecificationContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 2, MotorMusicParser.RULE_momentSpecification);
 		try {
-			this.state = 20;
+			this.state = 18;
 			this._errHandler.sync(this);
 			switch ( this._interp.adaptivePredict(this._input, 1, this._ctx) ) {
 			case 1:
-				localctx = new ParadoxicallySingleCouplingContext(this, localctx);
+				localctx = new ROOMContext(this, localctx);
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 16;
-				(localctx as ParadoxicallySingleCouplingContext)._top = this.qualia();
+				this.state = 14;
+				(localctx as ROOMContext)._time = this.match(MotorMusicParser.NUMBER);
 				}
 				break;
 			case 2:
-				localctx = new MultiCouplingListContext(this, localctx);
+				localctx = new PathPointContext(this, localctx);
 				this.enterOuterAlt(localctx, 2);
 				{
+				this.state = 15;
+				(localctx as PathPointContext)._time = this.match(MotorMusicParser.NUMBER);
+				this.state = 16;
+				this.match(MotorMusicParser.COLON);
 				this.state = 17;
-				(localctx as MultiCouplingListContext)._top = this.qualia();
-				this.state = 18;
-				(localctx as MultiCouplingListContext)._rest = this.coupling_list();
+				(localctx as PathPointContext)._path = this.match(MotorMusicParser.NAMED_SYMBOL);
 				}
 				break;
 			}
@@ -159,35 +150,31 @@ export default class MotorMusicParser extends Parser {
 		return localctx;
 	}
 	// @RuleVersion(0)
-	public qualia(): QualiaContext {
-		let localctx: QualiaContext = new QualiaContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 4, MotorMusicParser.RULE_qualia);
+	public specification_list(): Specification_listContext {
+		let localctx: Specification_listContext = new Specification_listContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 4, MotorMusicParser.RULE_specification_list);
 		try {
-			this.state = 27;
+			this.state = 24;
 			this._errHandler.sync(this);
-			switch (this._input.LA(1)) {
-			case 2:
-				localctx = new NamedQualiaContext(this, localctx);
+			switch ( this._interp.adaptivePredict(this._input, 2, this._ctx) ) {
+			case 1:
+				localctx = new SingleSpecificationListContext(this, localctx);
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 22;
-				(localctx as NamedQualiaContext)._name = this.match(MotorMusicParser.NAMED_SYMBOL);
+				this.state = 20;
+				(localctx as SingleSpecificationListContext)._top = this.specification(0);
 				}
 				break;
-			case 11:
-				localctx = new ExperiencedQualiaContext(this, localctx);
+			case 2:
+				localctx = new MuultiSpecificationListContext(this, localctx);
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 23;
-				this.match(MotorMusicParser.QUOTE);
-				this.state = 24;
-				(localctx as ExperiencedQualiaContext)._passed = this.experience(0);
-				this.state = 25;
-				this.match(MotorMusicParser.QUOTE);
+				this.state = 21;
+				(localctx as MuultiSpecificationListContext)._top = this.specification(0);
+				this.state = 22;
+				(localctx as MuultiSpecificationListContext)._rest = this.specification_list();
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -205,91 +192,55 @@ export default class MotorMusicParser extends Parser {
 		return localctx;
 	}
 
-	public experience(): ExperienceContext;
-	public experience(_p: number): ExperienceContext;
+	public specification(): SpecificationContext;
+	public specification(_p: number): SpecificationContext;
 	// @RuleVersion(0)
-	public experience(_p?: number): ExperienceContext {
+	public specification(_p?: number): SpecificationContext {
 		if (_p === undefined) {
 			_p = 0;
 		}
 
 		let _parentctx: ParserRuleContext = this._ctx;
 		let _parentState: number = this.state;
-		let localctx: ExperienceContext = new ExperienceContext(this, this._ctx, _parentState);
-		let _prevctx: ExperienceContext = localctx;
+		let localctx: SpecificationContext = new SpecificationContext(this, this._ctx, _parentState);
+		let _prevctx: SpecificationContext = localctx;
 		let _startState: number = 6;
-		this.enterRecursionRule(localctx, 6, MotorMusicParser.RULE_experience, _p);
+		this.enterRecursionRule(localctx, 6, MotorMusicParser.RULE_specification, _p);
 		try {
 			let _alt: number;
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 50;
+			this.state = 32;
 			this._errHandler.sync(this);
-			switch ( this._interp.adaptivePredict(this._input, 3, this._ctx) ) {
-			case 1:
+			switch (this._input.LA(1)) {
+			case 3:
 				{
-				localctx = new CouplingContext(this, localctx);
+				localctx = new MomentContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
 
-				this.state = 30;
-				this.match(MotorMusicParser.LANGLE);
-				this.state = 31;
-				(localctx as CouplingContext)._coupling = this.coupling_list();
-				this.state = 32;
-				this.match(MotorMusicParser.RANGLE);
+				this.state = 27;
+				(localctx as MomentContext)._throughThisMoment = this.momentSpecification();
 				}
 				break;
-			case 2:
+			case 6:
 				{
-				localctx = new SuccessiveContext(this, localctx);
+				localctx = new SeqContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 34;
+				this.state = 28;
 				this.match(MotorMusicParser.LPAREN);
-				this.state = 35;
-				(localctx as SuccessiveContext)._successive_experiences = this.experience_list();
-				this.state = 36;
+				this.state = 29;
+				(localctx as SeqContext)._specifications = this.specification_list();
+				this.state = 30;
 				this.match(MotorMusicParser.RPAREN);
 				}
 				break;
-			case 3:
-				{
-				localctx = new DigestContext(this, localctx);
-				this._ctx = localctx;
-				_prevctx = localctx;
-				this.state = 38;
-				this.match(MotorMusicParser.LSQBRACKET);
-				this.state = 39;
-				(localctx as DigestContext)._to_be_digested = this.experience(0);
-				this.state = 40;
-				this.match(MotorMusicParser.RIGHTARROW);
-				this.state = 41;
-				(localctx as DigestContext)._gestalt = this.match(MotorMusicParser.NAMED_SYMBOL);
-				this.state = 42;
-				this.match(MotorMusicParser.RSQBRACKET);
-				}
-				break;
-			case 4:
-				{
-				localctx = new SpawnContext(this, localctx);
-				this._ctx = localctx;
-				_prevctx = localctx;
-				this.state = 44;
-				this.match(MotorMusicParser.LSQBRACKET);
-				this.state = 45;
-				(localctx as SpawnContext)._gestalt = this.match(MotorMusicParser.NAMED_SYMBOL);
-				this.state = 46;
-				this.match(MotorMusicParser.RIGHTARROW);
-				this.state = 47;
-				(localctx as SpawnContext)._to_spawn = this.experience(0);
-				this.state = 48;
-				this.match(MotorMusicParser.RSQBRACKET);
-				}
-				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 			this._ctx.stop = this._input.LT(-1);
-			this.state = 59;
+			this.state = 41;
 			this._errHandler.sync(this);
 			_alt = this._interp.adaptivePredict(this._input, 4, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
@@ -300,23 +251,23 @@ export default class MotorMusicParser extends Parser {
 					_prevctx = localctx;
 					{
 					{
-					localctx = new ContainmentContext(this, new ExperienceContext(this, _parentctx, _parentState));
-					(localctx as ContainmentContext)._containing = _prevctx;
-					this.pushNewRecursionContext(localctx, _startState, MotorMusicParser.RULE_experience);
-					this.state = 52;
-					if (!(this.precpred(this._ctx, 3))) {
-						throw this.createFailedPredicateException("this.precpred(this._ctx, 3)");
+					localctx = new ConContext(this, new SpecificationContext(this, _parentctx, _parentState));
+					(localctx as ConContext)._top = _prevctx;
+					this.pushNewRecursionContext(localctx, _startState, MotorMusicParser.RULE_specification);
+					this.state = 34;
+					if (!(this.precpred(this._ctx, 1))) {
+						throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
 					}
-					this.state = 53;
+					this.state = 35;
 					this.match(MotorMusicParser.LCURLY);
-					this.state = 54;
-					(localctx as ContainmentContext)._contained = this.experience(0);
-					this.state = 55;
+					this.state = 36;
+					(localctx as ConContext)._specifications = this.specification_list();
+					this.state = 37;
 					this.match(MotorMusicParser.RCURLY);
 					}
 					}
 				}
-				this.state = 61;
+				this.state = 43;
 				this._errHandler.sync(this);
 				_alt = this._interp.adaptivePredict(this._input, 4, this._ctx);
 			}
@@ -336,84 +287,35 @@ export default class MotorMusicParser extends Parser {
 		}
 		return localctx;
 	}
-	// @RuleVersion(0)
-	public experience_list(): Experience_listContext {
-		let localctx: Experience_listContext = new Experience_listContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 8, MotorMusicParser.RULE_experience_list);
-		try {
-			this.state = 66;
-			this._errHandler.sync(this);
-			switch ( this._interp.adaptivePredict(this._input, 5, this._ctx) ) {
-			case 1:
-				localctx = new SingleExperienceListContext(this, localctx);
-				this.enterOuterAlt(localctx, 1);
-				{
-				this.state = 62;
-				(localctx as SingleExperienceListContext)._top = this.experience(0);
-				}
-				break;
-			case 2:
-				localctx = new MultiExperienceListContext(this, localctx);
-				this.enterOuterAlt(localctx, 2);
-				{
-				this.state = 63;
-				(localctx as MultiExperienceListContext)._top = this.experience(0);
-				this.state = 64;
-				(localctx as MultiExperienceListContext)._rest = this.experience_list();
-				}
-				break;
-			}
-		}
-		catch (re) {
-			if (re instanceof RecognitionException) {
-				localctx.exception = re;
-				this._errHandler.reportError(this, re);
-				this._errHandler.recover(this, re);
-			} else {
-				throw re;
-			}
-		}
-		finally {
-			this.exitRule();
-		}
-		return localctx;
-	}
 
 	public sempred(localctx: RuleContext, ruleIndex: number, predIndex: number): boolean {
 		switch (ruleIndex) {
 		case 3:
-			return this.experience_sempred(localctx as ExperienceContext, predIndex);
+			return this.specification_sempred(localctx as SpecificationContext, predIndex);
 		}
 		return true;
 	}
-	private experience_sempred(localctx: ExperienceContext, predIndex: number): boolean {
+	private specification_sempred(localctx: SpecificationContext, predIndex: number): boolean {
 		switch (predIndex) {
 		case 0:
-			return this.precpred(this._ctx, 3);
+			return this.precpred(this._ctx, 1);
 		}
 		return true;
 	}
 
-	public static readonly _serializedATN: number[] = [4,1,13,69,2,0,7,0,2,
-	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,1,0,1,0,1,0,1,0,3,0,15,8,0,1,1,1,1,1,1,1,
-	1,3,1,21,8,1,1,2,1,2,1,2,1,2,1,2,3,2,28,8,2,1,3,1,3,1,3,1,3,1,3,1,3,1,3,
-	1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,3,3,51,8,3,1,3,
-	1,3,1,3,1,3,1,3,5,3,58,8,3,10,3,12,3,61,9,3,1,4,1,4,1,4,1,4,3,4,67,8,4,
-	1,4,0,1,6,5,0,2,4,6,8,0,0,71,0,14,1,0,0,0,2,20,1,0,0,0,4,27,1,0,0,0,6,50,
-	1,0,0,0,8,66,1,0,0,0,10,15,5,0,0,1,11,12,3,6,3,0,12,13,5,0,0,1,13,15,1,
-	0,0,0,14,10,1,0,0,0,14,11,1,0,0,0,15,1,1,0,0,0,16,21,3,4,2,0,17,18,3,4,
-	2,0,18,19,3,2,1,0,19,21,1,0,0,0,20,16,1,0,0,0,20,17,1,0,0,0,21,3,1,0,0,
-	0,22,28,5,2,0,0,23,24,5,11,0,0,24,25,3,6,3,0,25,26,5,11,0,0,26,28,1,0,0,
-	0,27,22,1,0,0,0,27,23,1,0,0,0,28,5,1,0,0,0,29,30,6,3,-1,0,30,31,5,7,0,0,
-	31,32,3,2,1,0,32,33,5,8,0,0,33,51,1,0,0,0,34,35,5,5,0,0,35,36,3,8,4,0,36,
-	37,5,6,0,0,37,51,1,0,0,0,38,39,5,9,0,0,39,40,3,6,3,0,40,41,5,12,0,0,41,
-	42,5,2,0,0,42,43,5,10,0,0,43,51,1,0,0,0,44,45,5,9,0,0,45,46,5,2,0,0,46,
-	47,5,12,0,0,47,48,3,6,3,0,48,49,5,10,0,0,49,51,1,0,0,0,50,29,1,0,0,0,50,
-	34,1,0,0,0,50,38,1,0,0,0,50,44,1,0,0,0,51,59,1,0,0,0,52,53,10,3,0,0,53,
-	54,5,3,0,0,54,55,3,6,3,0,55,56,5,4,0,0,56,58,1,0,0,0,57,52,1,0,0,0,58,61,
-	1,0,0,0,59,57,1,0,0,0,59,60,1,0,0,0,60,7,1,0,0,0,61,59,1,0,0,0,62,67,3,
-	6,3,0,63,64,3,6,3,0,64,65,3,8,4,0,65,67,1,0,0,0,66,62,1,0,0,0,66,63,1,0,
-	0,0,67,9,1,0,0,0,6,14,20,27,50,59,66];
+	public static readonly _serializedATN: number[] = [4,1,9,45,2,0,7,0,2,1,
+	7,1,2,2,7,2,2,3,7,3,1,0,1,0,1,0,1,0,3,0,13,8,0,1,1,1,1,1,1,1,1,3,1,19,8,
+	1,1,2,1,2,1,2,1,2,3,2,25,8,2,1,3,1,3,1,3,1,3,1,3,1,3,3,3,33,8,3,1,3,1,3,
+	1,3,1,3,1,3,5,3,40,8,3,10,3,12,3,43,9,3,1,3,0,1,6,4,0,2,4,6,0,0,45,0,12,
+	1,0,0,0,2,18,1,0,0,0,4,24,1,0,0,0,6,32,1,0,0,0,8,13,5,0,0,1,9,10,3,6,3,
+	0,10,11,5,0,0,1,11,13,1,0,0,0,12,8,1,0,0,0,12,9,1,0,0,0,13,1,1,0,0,0,14,
+	19,5,3,0,0,15,16,5,3,0,0,16,17,5,8,0,0,17,19,5,2,0,0,18,14,1,0,0,0,18,15,
+	1,0,0,0,19,3,1,0,0,0,20,25,3,6,3,0,21,22,3,6,3,0,22,23,3,4,2,0,23,25,1,
+	0,0,0,24,20,1,0,0,0,24,21,1,0,0,0,25,5,1,0,0,0,26,27,6,3,-1,0,27,33,3,2,
+	1,0,28,29,5,6,0,0,29,30,3,4,2,0,30,31,5,7,0,0,31,33,1,0,0,0,32,26,1,0,0,
+	0,32,28,1,0,0,0,33,41,1,0,0,0,34,35,10,1,0,0,35,36,5,4,0,0,36,37,3,4,2,
+	0,37,38,5,5,0,0,38,40,1,0,0,0,39,34,1,0,0,0,40,43,1,0,0,0,41,39,1,0,0,0,
+	41,42,1,0,0,0,42,7,1,0,0,0,43,41,1,0,0,0,5,12,18,24,32,41];
 
 	private static __ATN: ATN;
 	public static get _ATN(): ATN {
@@ -442,7 +344,7 @@ export class CompilationUnitContext extends ParserRuleContext {
 	}
 }
 export class NonEmptyProgramContext extends CompilationUnitContext {
-	public _e!: ExperienceContext;
+	public _e!: SpecificationContext;
 	constructor(parser: MotorMusicParser, ctx: CompilationUnitContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
@@ -450,8 +352,8 @@ export class NonEmptyProgramContext extends CompilationUnitContext {
 	public EOF(): TerminalNode {
 		return this.getToken(MotorMusicParser.EOF, 0);
 	}
-	public experience(): ExperienceContext {
-		return this.getTypedRuleContext(ExperienceContext, 0) as ExperienceContext;
+	public specification(): SpecificationContext {
+		return this.getTypedRuleContext(SpecificationContext, 0) as SpecificationContext;
 	}
 	public enterRule(listener: MotorMusicParserListener): void {
 	    if(listener.enterNonEmptyProgram) {
@@ -486,258 +388,141 @@ export class EmptyProgramContext extends CompilationUnitContext {
 }
 
 
-export class Coupling_listContext extends ParserRuleContext {
+export class MomentSpecificationContext extends ParserRuleContext {
 	constructor(parser?: MotorMusicParser, parent?: ParserRuleContext, invokingState?: number) {
 		super(parent, invokingState);
     	this.parser = parser;
 	}
     public get ruleIndex(): number {
-    	return MotorMusicParser.RULE_coupling_list;
+    	return MotorMusicParser.RULE_momentSpecification;
 	}
-	public override copyFrom(ctx: Coupling_listContext): void {
+	public override copyFrom(ctx: MomentSpecificationContext): void {
 		super.copyFrom(ctx);
 	}
 }
-export class ParadoxicallySingleCouplingContext extends Coupling_listContext {
-	public _top!: QualiaContext;
-	constructor(parser: MotorMusicParser, ctx: Coupling_listContext) {
+export class PathPointContext extends MomentSpecificationContext {
+	public _time!: Token;
+	public _path!: Token;
+	constructor(parser: MotorMusicParser, ctx: MomentSpecificationContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
 	}
-	public qualia(): QualiaContext {
-		return this.getTypedRuleContext(QualiaContext, 0) as QualiaContext;
+	public COLON(): TerminalNode {
+		return this.getToken(MotorMusicParser.COLON, 0);
+	}
+	public NUMBER(): TerminalNode {
+		return this.getToken(MotorMusicParser.NUMBER, 0);
+	}
+	public NAMED_SYMBOL(): TerminalNode {
+		return this.getToken(MotorMusicParser.NAMED_SYMBOL, 0);
 	}
 	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterParadoxicallySingleCoupling) {
-	 		listener.enterParadoxicallySingleCoupling(this);
+	    if(listener.enterPathPoint) {
+	 		listener.enterPathPoint(this);
 		}
 	}
 	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitParadoxicallySingleCoupling) {
-	 		listener.exitParadoxicallySingleCoupling(this);
+	    if(listener.exitPathPoint) {
+	 		listener.exitPathPoint(this);
 		}
 	}
 }
-export class MultiCouplingListContext extends Coupling_listContext {
-	public _top!: QualiaContext;
-	public _rest!: Coupling_listContext;
-	constructor(parser: MotorMusicParser, ctx: Coupling_listContext) {
+export class ROOMContext extends MomentSpecificationContext {
+	public _time!: Token;
+	constructor(parser: MotorMusicParser, ctx: MomentSpecificationContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
 	}
-	public qualia(): QualiaContext {
-		return this.getTypedRuleContext(QualiaContext, 0) as QualiaContext;
-	}
-	public coupling_list(): Coupling_listContext {
-		return this.getTypedRuleContext(Coupling_listContext, 0) as Coupling_listContext;
+	public NUMBER(): TerminalNode {
+		return this.getToken(MotorMusicParser.NUMBER, 0);
 	}
 	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterMultiCouplingList) {
-	 		listener.enterMultiCouplingList(this);
+	    if(listener.enterROOM) {
+	 		listener.enterROOM(this);
 		}
 	}
 	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitMultiCouplingList) {
-	 		listener.exitMultiCouplingList(this);
+	    if(listener.exitROOM) {
+	 		listener.exitROOM(this);
 		}
 	}
 }
 
 
-export class QualiaContext extends ParserRuleContext {
+export class Specification_listContext extends ParserRuleContext {
 	constructor(parser?: MotorMusicParser, parent?: ParserRuleContext, invokingState?: number) {
 		super(parent, invokingState);
     	this.parser = parser;
 	}
     public get ruleIndex(): number {
-    	return MotorMusicParser.RULE_qualia;
+    	return MotorMusicParser.RULE_specification_list;
 	}
-	public override copyFrom(ctx: QualiaContext): void {
+	public override copyFrom(ctx: Specification_listContext): void {
 		super.copyFrom(ctx);
 	}
 }
-export class NamedQualiaContext extends QualiaContext {
-	public _name!: Token;
-	constructor(parser: MotorMusicParser, ctx: QualiaContext) {
+export class SingleSpecificationListContext extends Specification_listContext {
+	public _top!: SpecificationContext;
+	constructor(parser: MotorMusicParser, ctx: Specification_listContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
 	}
-	public NAMED_SYMBOL(): TerminalNode {
-		return this.getToken(MotorMusicParser.NAMED_SYMBOL, 0);
+	public specification(): SpecificationContext {
+		return this.getTypedRuleContext(SpecificationContext, 0) as SpecificationContext;
 	}
 	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterNamedQualia) {
-	 		listener.enterNamedQualia(this);
+	    if(listener.enterSingleSpecificationList) {
+	 		listener.enterSingleSpecificationList(this);
 		}
 	}
 	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitNamedQualia) {
-	 		listener.exitNamedQualia(this);
+	    if(listener.exitSingleSpecificationList) {
+	 		listener.exitSingleSpecificationList(this);
 		}
 	}
 }
-export class ExperiencedQualiaContext extends QualiaContext {
-	public _passed!: ExperienceContext;
-	constructor(parser: MotorMusicParser, ctx: QualiaContext) {
+export class MuultiSpecificationListContext extends Specification_listContext {
+	public _top!: SpecificationContext;
+	public _rest!: Specification_listContext;
+	constructor(parser: MotorMusicParser, ctx: Specification_listContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
 	}
-	public QUOTE_list(): TerminalNode[] {
-	    	return this.getTokens(MotorMusicParser.QUOTE);
+	public specification(): SpecificationContext {
+		return this.getTypedRuleContext(SpecificationContext, 0) as SpecificationContext;
 	}
-	public QUOTE(i: number): TerminalNode {
-		return this.getToken(MotorMusicParser.QUOTE, i);
-	}
-	public experience(): ExperienceContext {
-		return this.getTypedRuleContext(ExperienceContext, 0) as ExperienceContext;
+	public specification_list(): Specification_listContext {
+		return this.getTypedRuleContext(Specification_listContext, 0) as Specification_listContext;
 	}
 	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterExperiencedQualia) {
-	 		listener.enterExperiencedQualia(this);
+	    if(listener.enterMuultiSpecificationList) {
+	 		listener.enterMuultiSpecificationList(this);
 		}
 	}
 	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitExperiencedQualia) {
-	 		listener.exitExperiencedQualia(this);
+	    if(listener.exitMuultiSpecificationList) {
+	 		listener.exitMuultiSpecificationList(this);
 		}
 	}
 }
 
 
-export class ExperienceContext extends ParserRuleContext {
+export class SpecificationContext extends ParserRuleContext {
 	constructor(parser?: MotorMusicParser, parent?: ParserRuleContext, invokingState?: number) {
 		super(parent, invokingState);
     	this.parser = parser;
 	}
     public get ruleIndex(): number {
-    	return MotorMusicParser.RULE_experience;
+    	return MotorMusicParser.RULE_specification;
 	}
-	public override copyFrom(ctx: ExperienceContext): void {
+	public override copyFrom(ctx: SpecificationContext): void {
 		super.copyFrom(ctx);
 	}
 }
-export class SuccessiveContext extends ExperienceContext {
-	public _successive_experiences!: Experience_listContext;
-	constructor(parser: MotorMusicParser, ctx: ExperienceContext) {
-		super(parser, ctx.parentCtx, ctx.invokingState);
-		super.copyFrom(ctx);
-	}
-	public LPAREN(): TerminalNode {
-		return this.getToken(MotorMusicParser.LPAREN, 0);
-	}
-	public RPAREN(): TerminalNode {
-		return this.getToken(MotorMusicParser.RPAREN, 0);
-	}
-	public experience_list(): Experience_listContext {
-		return this.getTypedRuleContext(Experience_listContext, 0) as Experience_listContext;
-	}
-	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterSuccessive) {
-	 		listener.enterSuccessive(this);
-		}
-	}
-	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitSuccessive) {
-	 		listener.exitSuccessive(this);
-		}
-	}
-}
-export class DigestContext extends ExperienceContext {
-	public _to_be_digested!: ExperienceContext;
-	public _gestalt!: Token;
-	constructor(parser: MotorMusicParser, ctx: ExperienceContext) {
-		super(parser, ctx.parentCtx, ctx.invokingState);
-		super.copyFrom(ctx);
-	}
-	public LSQBRACKET(): TerminalNode {
-		return this.getToken(MotorMusicParser.LSQBRACKET, 0);
-	}
-	public RIGHTARROW(): TerminalNode {
-		return this.getToken(MotorMusicParser.RIGHTARROW, 0);
-	}
-	public RSQBRACKET(): TerminalNode {
-		return this.getToken(MotorMusicParser.RSQBRACKET, 0);
-	}
-	public experience(): ExperienceContext {
-		return this.getTypedRuleContext(ExperienceContext, 0) as ExperienceContext;
-	}
-	public NAMED_SYMBOL(): TerminalNode {
-		return this.getToken(MotorMusicParser.NAMED_SYMBOL, 0);
-	}
-	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterDigest) {
-	 		listener.enterDigest(this);
-		}
-	}
-	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitDigest) {
-	 		listener.exitDigest(this);
-		}
-	}
-}
-export class CouplingContext extends ExperienceContext {
-	public _coupling!: Coupling_listContext;
-	constructor(parser: MotorMusicParser, ctx: ExperienceContext) {
-		super(parser, ctx.parentCtx, ctx.invokingState);
-		super.copyFrom(ctx);
-	}
-	public LANGLE(): TerminalNode {
-		return this.getToken(MotorMusicParser.LANGLE, 0);
-	}
-	public RANGLE(): TerminalNode {
-		return this.getToken(MotorMusicParser.RANGLE, 0);
-	}
-	public coupling_list(): Coupling_listContext {
-		return this.getTypedRuleContext(Coupling_listContext, 0) as Coupling_listContext;
-	}
-	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterCoupling) {
-	 		listener.enterCoupling(this);
-		}
-	}
-	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitCoupling) {
-	 		listener.exitCoupling(this);
-		}
-	}
-}
-export class SpawnContext extends ExperienceContext {
-	public _gestalt!: Token;
-	public _to_spawn!: ExperienceContext;
-	constructor(parser: MotorMusicParser, ctx: ExperienceContext) {
-		super(parser, ctx.parentCtx, ctx.invokingState);
-		super.copyFrom(ctx);
-	}
-	public LSQBRACKET(): TerminalNode {
-		return this.getToken(MotorMusicParser.LSQBRACKET, 0);
-	}
-	public RIGHTARROW(): TerminalNode {
-		return this.getToken(MotorMusicParser.RIGHTARROW, 0);
-	}
-	public RSQBRACKET(): TerminalNode {
-		return this.getToken(MotorMusicParser.RSQBRACKET, 0);
-	}
-	public NAMED_SYMBOL(): TerminalNode {
-		return this.getToken(MotorMusicParser.NAMED_SYMBOL, 0);
-	}
-	public experience(): ExperienceContext {
-		return this.getTypedRuleContext(ExperienceContext, 0) as ExperienceContext;
-	}
-	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterSpawn) {
-	 		listener.enterSpawn(this);
-		}
-	}
-	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitSpawn) {
-	 		listener.exitSpawn(this);
-		}
-	}
-}
-export class ContainmentContext extends ExperienceContext {
-	public _containing!: ExperienceContext;
-	public _contained!: ExperienceContext;
-	constructor(parser: MotorMusicParser, ctx: ExperienceContext) {
+export class ConContext extends SpecificationContext {
+	public _top!: SpecificationContext;
+	public _specifications!: Specification_listContext;
+	constructor(parser: MotorMusicParser, ctx: SpecificationContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
 	}
@@ -747,78 +532,66 @@ export class ContainmentContext extends ExperienceContext {
 	public RCURLY(): TerminalNode {
 		return this.getToken(MotorMusicParser.RCURLY, 0);
 	}
-	public experience_list(): ExperienceContext[] {
-		return this.getTypedRuleContexts(ExperienceContext) as ExperienceContext[];
+	public specification(): SpecificationContext {
+		return this.getTypedRuleContext(SpecificationContext, 0) as SpecificationContext;
 	}
-	public experience(i: number): ExperienceContext {
-		return this.getTypedRuleContext(ExperienceContext, i) as ExperienceContext;
+	public specification_list(): Specification_listContext {
+		return this.getTypedRuleContext(Specification_listContext, 0) as Specification_listContext;
 	}
 	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterContainment) {
-	 		listener.enterContainment(this);
+	    if(listener.enterCon) {
+	 		listener.enterCon(this);
 		}
 	}
 	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitContainment) {
-	 		listener.exitContainment(this);
+	    if(listener.exitCon) {
+	 		listener.exitCon(this);
 		}
 	}
 }
-
-
-export class Experience_listContext extends ParserRuleContext {
-	constructor(parser?: MotorMusicParser, parent?: ParserRuleContext, invokingState?: number) {
-		super(parent, invokingState);
-    	this.parser = parser;
-	}
-    public get ruleIndex(): number {
-    	return MotorMusicParser.RULE_experience_list;
-	}
-	public override copyFrom(ctx: Experience_listContext): void {
-		super.copyFrom(ctx);
-	}
-}
-export class MultiExperienceListContext extends Experience_listContext {
-	public _top!: ExperienceContext;
-	public _rest!: Experience_listContext;
-	constructor(parser: MotorMusicParser, ctx: Experience_listContext) {
+export class MomentContext extends SpecificationContext {
+	public _throughThisMoment!: MomentSpecificationContext;
+	constructor(parser: MotorMusicParser, ctx: SpecificationContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
 	}
-	public experience(): ExperienceContext {
-		return this.getTypedRuleContext(ExperienceContext, 0) as ExperienceContext;
-	}
-	public experience_list(): Experience_listContext {
-		return this.getTypedRuleContext(Experience_listContext, 0) as Experience_listContext;
+	public momentSpecification(): MomentSpecificationContext {
+		return this.getTypedRuleContext(MomentSpecificationContext, 0) as MomentSpecificationContext;
 	}
 	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterMultiExperienceList) {
-	 		listener.enterMultiExperienceList(this);
+	    if(listener.enterMoment) {
+	 		listener.enterMoment(this);
 		}
 	}
 	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitMultiExperienceList) {
-	 		listener.exitMultiExperienceList(this);
+	    if(listener.exitMoment) {
+	 		listener.exitMoment(this);
 		}
 	}
 }
-export class SingleExperienceListContext extends Experience_listContext {
-	public _top!: ExperienceContext;
-	constructor(parser: MotorMusicParser, ctx: Experience_listContext) {
+export class SeqContext extends SpecificationContext {
+	public _specifications!: Specification_listContext;
+	constructor(parser: MotorMusicParser, ctx: SpecificationContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
 	}
-	public experience(): ExperienceContext {
-		return this.getTypedRuleContext(ExperienceContext, 0) as ExperienceContext;
+	public LPAREN(): TerminalNode {
+		return this.getToken(MotorMusicParser.LPAREN, 0);
+	}
+	public RPAREN(): TerminalNode {
+		return this.getToken(MotorMusicParser.RPAREN, 0);
+	}
+	public specification_list(): Specification_listContext {
+		return this.getTypedRuleContext(Specification_listContext, 0) as Specification_listContext;
 	}
 	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterSingleExperienceList) {
-	 		listener.enterSingleExperienceList(this);
+	    if(listener.enterSeq) {
+	 		listener.enterSeq(this);
 		}
 	}
 	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitSingleExperienceList) {
-	 		listener.exitSingleExperienceList(this);
+	    if(listener.exitSeq) {
+	 		listener.exitSeq(this);
 		}
 	}
 }

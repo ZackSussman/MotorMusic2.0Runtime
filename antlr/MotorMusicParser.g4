@@ -4,28 +4,21 @@ options {tokenVocab = MotorMusicLexer;}
 
 compilationUnit:
       e = EOF #EmptyProgram
-    | e = experience EOF #NonEmptyProgram
+    | e = specification EOF #NonEmptyProgram
 ;
 
-coupling_list:
-    top = qualia #ParadoxicallySingleCoupling
-  | top = qualia rest = coupling_list #MultiCouplingList
+momentSpecification: 
+    time = NUMBER #ROOM
+  | time = NUMBER COLON path = NAMED_SYMBOL  #PathPoint
 ;
 
-qualia: 
-    name = NAMED_SYMBOL #NamedQualia
-  | QUOTE passed = experience QUOTE #ExperiencedQualia
+specification_list:
+    top = specification #SingleSpecificationList
+  | top = specification rest = specification_list #MuultiSpecificationList
 ;
 
-experience:
-    LANGLE coupling = coupling_list RANGLE #Coupling 
-  | LPAREN successive_experiences = experience_list RPAREN #Successive
-  | containing = experience LCURLY contained = experience RCURLY #Containment
-  | LSQBRACKET to_be_digested = experience RIGHTARROW gestalt = NAMED_SYMBOL RSQBRACKET #Digest 
-  | LSQBRACKET gestalt = NAMED_SYMBOL RIGHTARROW to_spawn = experience RSQBRACKET #Spawn
-;
-
-experience_list:
-    top = experience #SingleExperienceList
-  | top = experience rest = experience_list #MultiExperienceList
+specification:
+    throughThisMoment = momentSpecification #Moment
+  | LPAREN specifications = specification_list RPAREN #Seq
+  | top = specification LCURLY specifications = specification_list RCURLY #Con
 ;
