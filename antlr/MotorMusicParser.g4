@@ -4,7 +4,7 @@ options {tokenVocab = MotorMusicLexer;}
 
 compilationUnit:
       e = EOF #EmptyProgram
-    | e = specification EOF #NonEmptyProgram
+    | specifications = specification_list EOF #NonEmptyProgram
 ;
 
 momentSpecification: 
@@ -14,11 +14,11 @@ momentSpecification:
 
 specification_list:
     top = specification #SingleSpecificationList
-  | top = specification rest = specification_list #MuultiSpecificationList
+  | top = specification rest = specification_list #MultiSpecificationList
 ;
 
 specification:
     throughThisMoment = momentSpecification #Moment
-  | LPAREN specifications = specification_list RPAREN #Seq
+  | LPAREN specifications = specification_list RPAREN #ParenSeq
   | top = specification LCURLY specifications = specification_list RCURLY #Con
 ;

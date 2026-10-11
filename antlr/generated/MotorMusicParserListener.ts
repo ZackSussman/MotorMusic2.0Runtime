@@ -8,10 +8,10 @@ import { NonEmptyProgramContext } from "./MotorMusicParser.js";
 import { ROOMContext } from "./MotorMusicParser.js";
 import { PathPointContext } from "./MotorMusicParser.js";
 import { SingleSpecificationListContext } from "./MotorMusicParser.js";
-import { MuultiSpecificationListContext } from "./MotorMusicParser.js";
+import { MultiSpecificationListContext } from "./MotorMusicParser.js";
+import { ParenSeqContext } from "./MotorMusicParser.js";
 import { ConContext } from "./MotorMusicParser.js";
 import { MomentContext } from "./MotorMusicParser.js";
-import { SeqContext } from "./MotorMusicParser.js";
 
 
 /**
@@ -80,17 +80,29 @@ export default class MotorMusicParserListener extends ParseTreeListener {
 	 */
 	exitSingleSpecificationList?: (ctx: SingleSpecificationListContext) => void;
 	/**
-	 * Enter a parse tree produced by the `MuultiSpecificationList`
+	 * Enter a parse tree produced by the `MultiSpecificationList`
 	 * labeled alternative in `MotorMusicParser.specification_list`.
 	 * @param ctx the parse tree
 	 */
-	enterMuultiSpecificationList?: (ctx: MuultiSpecificationListContext) => void;
+	enterMultiSpecificationList?: (ctx: MultiSpecificationListContext) => void;
 	/**
-	 * Exit a parse tree produced by the `MuultiSpecificationList`
+	 * Exit a parse tree produced by the `MultiSpecificationList`
 	 * labeled alternative in `MotorMusicParser.specification_list`.
 	 * @param ctx the parse tree
 	 */
-	exitMuultiSpecificationList?: (ctx: MuultiSpecificationListContext) => void;
+	exitMultiSpecificationList?: (ctx: MultiSpecificationListContext) => void;
+	/**
+	 * Enter a parse tree produced by the `ParenSeq`
+	 * labeled alternative in `MotorMusicParser.specification`.
+	 * @param ctx the parse tree
+	 */
+	enterParenSeq?: (ctx: ParenSeqContext) => void;
+	/**
+	 * Exit a parse tree produced by the `ParenSeq`
+	 * labeled alternative in `MotorMusicParser.specification`.
+	 * @param ctx the parse tree
+	 */
+	exitParenSeq?: (ctx: ParenSeqContext) => void;
 	/**
 	 * Enter a parse tree produced by the `Con`
 	 * labeled alternative in `MotorMusicParser.specification`.
@@ -115,17 +127,5 @@ export default class MotorMusicParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitMoment?: (ctx: MomentContext) => void;
-	/**
-	 * Enter a parse tree produced by the `Seq`
-	 * labeled alternative in `MotorMusicParser.specification`.
-	 * @param ctx the parse tree
-	 */
-	enterSeq?: (ctx: SeqContext) => void;
-	/**
-	 * Exit a parse tree produced by the `Seq`
-	 * labeled alternative in `MotorMusicParser.specification`.
-	 * @param ctx the parse tree
-	 */
-	exitSeq?: (ctx: SeqContext) => void;
 }
 

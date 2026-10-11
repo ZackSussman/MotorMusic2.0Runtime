@@ -81,7 +81,7 @@ export default class MotorMusicParser extends Parser {
 				this.enterOuterAlt(localctx, 2);
 				{
 				this.state = 9;
-				(localctx as NonEmptyProgramContext)._e = this.specification(0);
+				(localctx as NonEmptyProgramContext)._specifications = this.specification_list();
 				this.state = 10;
 				this.match(MotorMusicParser.EOF);
 				}
@@ -165,13 +165,13 @@ export default class MotorMusicParser extends Parser {
 				}
 				break;
 			case 2:
-				localctx = new MuultiSpecificationListContext(this, localctx);
+				localctx = new MultiSpecificationListContext(this, localctx);
 				this.enterOuterAlt(localctx, 2);
 				{
 				this.state = 21;
-				(localctx as MuultiSpecificationListContext)._top = this.specification(0);
+				(localctx as MultiSpecificationListContext)._top = this.specification(0);
 				this.state = 22;
-				(localctx as MuultiSpecificationListContext)._rest = this.specification_list();
+				(localctx as MultiSpecificationListContext)._rest = this.specification_list();
 				}
 				break;
 			}
@@ -224,13 +224,13 @@ export default class MotorMusicParser extends Parser {
 				break;
 			case 6:
 				{
-				localctx = new SeqContext(this, localctx);
+				localctx = new ParenSeqContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
 				this.state = 28;
 				this.match(MotorMusicParser.LPAREN);
 				this.state = 29;
-				(localctx as SeqContext)._specifications = this.specification_list();
+				(localctx as ParenSeqContext)._specifications = this.specification_list();
 				this.state = 30;
 				this.match(MotorMusicParser.RPAREN);
 				}
@@ -306,7 +306,7 @@ export default class MotorMusicParser extends Parser {
 	7,1,2,2,7,2,2,3,7,3,1,0,1,0,1,0,1,0,3,0,13,8,0,1,1,1,1,1,1,1,1,3,1,19,8,
 	1,1,2,1,2,1,2,1,2,3,2,25,8,2,1,3,1,3,1,3,1,3,1,3,1,3,3,3,33,8,3,1,3,1,3,
 	1,3,1,3,1,3,5,3,40,8,3,10,3,12,3,43,9,3,1,3,0,1,6,4,0,2,4,6,0,0,45,0,12,
-	1,0,0,0,2,18,1,0,0,0,4,24,1,0,0,0,6,32,1,0,0,0,8,13,5,0,0,1,9,10,3,6,3,
+	1,0,0,0,2,18,1,0,0,0,4,24,1,0,0,0,6,32,1,0,0,0,8,13,5,0,0,1,9,10,3,4,2,
 	0,10,11,5,0,0,1,11,13,1,0,0,0,12,8,1,0,0,0,12,9,1,0,0,0,13,1,1,0,0,0,14,
 	19,5,2,0,0,15,16,5,2,0,0,16,17,5,8,0,0,17,19,5,3,0,0,18,14,1,0,0,0,18,15,
 	1,0,0,0,19,3,1,0,0,0,20,25,3,6,3,0,21,22,3,6,3,0,22,23,3,4,2,0,23,25,1,
@@ -343,7 +343,7 @@ export class CompilationUnitContext extends ParserRuleContext {
 	}
 }
 export class NonEmptyProgramContext extends CompilationUnitContext {
-	public _e!: SpecificationContext;
+	public _specifications!: Specification_listContext;
 	constructor(parser: MotorMusicParser, ctx: CompilationUnitContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
@@ -351,8 +351,8 @@ export class NonEmptyProgramContext extends CompilationUnitContext {
 	public EOF(): TerminalNode {
 		return this.getToken(MotorMusicParser.EOF, 0);
 	}
-	public specification(): SpecificationContext {
-		return this.getTypedRuleContext(SpecificationContext, 0) as SpecificationContext;
+	public specification_list(): Specification_listContext {
+		return this.getTypedRuleContext(Specification_listContext, 0) as Specification_listContext;
 	}
 	public enterRule(listener: MotorMusicParserListener): void {
 	    if(listener.enterNonEmptyProgram) {
@@ -480,7 +480,7 @@ export class SingleSpecificationListContext extends Specification_listContext {
 		}
 	}
 }
-export class MuultiSpecificationListContext extends Specification_listContext {
+export class MultiSpecificationListContext extends Specification_listContext {
 	public _top!: SpecificationContext;
 	public _rest!: Specification_listContext;
 	constructor(parser: MotorMusicParser, ctx: Specification_listContext) {
@@ -494,13 +494,13 @@ export class MuultiSpecificationListContext extends Specification_listContext {
 		return this.getTypedRuleContext(Specification_listContext, 0) as Specification_listContext;
 	}
 	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterMuultiSpecificationList) {
-	 		listener.enterMuultiSpecificationList(this);
+	    if(listener.enterMultiSpecificationList) {
+	 		listener.enterMultiSpecificationList(this);
 		}
 	}
 	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitMuultiSpecificationList) {
-	 		listener.exitMuultiSpecificationList(this);
+	    if(listener.exitMultiSpecificationList) {
+	 		listener.exitMultiSpecificationList(this);
 		}
 	}
 }
@@ -516,6 +516,32 @@ export class SpecificationContext extends ParserRuleContext {
 	}
 	public override copyFrom(ctx: SpecificationContext): void {
 		super.copyFrom(ctx);
+	}
+}
+export class ParenSeqContext extends SpecificationContext {
+	public _specifications!: Specification_listContext;
+	constructor(parser: MotorMusicParser, ctx: SpecificationContext) {
+		super(parser, ctx.parentCtx, ctx.invokingState);
+		super.copyFrom(ctx);
+	}
+	public LPAREN(): TerminalNode {
+		return this.getToken(MotorMusicParser.LPAREN, 0);
+	}
+	public RPAREN(): TerminalNode {
+		return this.getToken(MotorMusicParser.RPAREN, 0);
+	}
+	public specification_list(): Specification_listContext {
+		return this.getTypedRuleContext(Specification_listContext, 0) as Specification_listContext;
+	}
+	public enterRule(listener: MotorMusicParserListener): void {
+	    if(listener.enterParenSeq) {
+	 		listener.enterParenSeq(this);
+		}
+	}
+	public exitRule(listener: MotorMusicParserListener): void {
+	    if(listener.exitParenSeq) {
+	 		listener.exitParenSeq(this);
+		}
 	}
 }
 export class ConContext extends SpecificationContext {
@@ -565,32 +591,6 @@ export class MomentContext extends SpecificationContext {
 	public exitRule(listener: MotorMusicParserListener): void {
 	    if(listener.exitMoment) {
 	 		listener.exitMoment(this);
-		}
-	}
-}
-export class SeqContext extends SpecificationContext {
-	public _specifications!: Specification_listContext;
-	constructor(parser: MotorMusicParser, ctx: SpecificationContext) {
-		super(parser, ctx.parentCtx, ctx.invokingState);
-		super.copyFrom(ctx);
-	}
-	public LPAREN(): TerminalNode {
-		return this.getToken(MotorMusicParser.LPAREN, 0);
-	}
-	public RPAREN(): TerminalNode {
-		return this.getToken(MotorMusicParser.RPAREN, 0);
-	}
-	public specification_list(): Specification_listContext {
-		return this.getTypedRuleContext(Specification_listContext, 0) as Specification_listContext;
-	}
-	public enterRule(listener: MotorMusicParserListener): void {
-	    if(listener.enterSeq) {
-	 		listener.enterSeq(this);
-		}
-	}
-	public exitRule(listener: MotorMusicParserListener): void {
-	    if(listener.exitSeq) {
-	 		listener.exitSeq(this);
 		}
 	}
 }

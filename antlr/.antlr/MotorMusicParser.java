@@ -16,7 +16,7 @@ public class MotorMusicParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		WS=1, NAMED_SYMBOL=2, NUMBER=3, LCURLY=4, RCURLY=5, LPAREN=6, RPAREN=7, 
+		WS=1, NUMBER=2, NAMED_SYMBOL=3, LCURLY=4, RCURLY=5, LPAREN=6, RPAREN=7, 
 		COLON=8, UNRECOGNIZED=9;
 	public static final int
 		RULE_compilationUnit = 0, RULE_momentSpecification = 1, RULE_specification_list = 2, 
@@ -36,7 +36,7 @@ public class MotorMusicParser extends Parser {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "WS", "NAMED_SYMBOL", "NUMBER", "LCURLY", "RCURLY", "LPAREN", "RPAREN", 
+			null, "WS", "NUMBER", "NAMED_SYMBOL", "LCURLY", "RCURLY", "LPAREN", "RPAREN", 
 			"COLON", "UNRECOGNIZED"
 		};
 	}
@@ -105,10 +105,10 @@ public class MotorMusicParser extends Parser {
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class NonEmptyProgramContext extends CompilationUnitContext {
-		public SpecificationContext e;
+		public Specification_listContext specifications;
 		public TerminalNode EOF() { return getToken(MotorMusicParser.EOF, 0); }
-		public SpecificationContext specification() {
-			return getRuleContext(SpecificationContext.class,0);
+		public Specification_listContext specification_list() {
+			return getRuleContext(Specification_listContext.class,0);
 		}
 		public NonEmptyProgramContext(CompilationUnitContext ctx) { copyFrom(ctx); }
 	}
@@ -140,7 +140,7 @@ public class MotorMusicParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(9);
-				((NonEmptyProgramContext)_localctx).e = specification(0);
+				((NonEmptyProgramContext)_localctx).specifications = specification_list();
 				setState(10);
 				match(EOF);
 				}
@@ -249,7 +249,7 @@ public class MotorMusicParser extends Parser {
 		public SingleSpecificationListContext(Specification_listContext ctx) { copyFrom(ctx); }
 	}
 	@SuppressWarnings("CheckReturnValue")
-	public static class MuultiSpecificationListContext extends Specification_listContext {
+	public static class MultiSpecificationListContext extends Specification_listContext {
 		public SpecificationContext top;
 		public Specification_listContext rest;
 		public SpecificationContext specification() {
@@ -258,7 +258,7 @@ public class MotorMusicParser extends Parser {
 		public Specification_listContext specification_list() {
 			return getRuleContext(Specification_listContext.class,0);
 		}
-		public MuultiSpecificationListContext(Specification_listContext ctx) { copyFrom(ctx); }
+		public MultiSpecificationListContext(Specification_listContext ctx) { copyFrom(ctx); }
 	}
 
 	public final Specification_listContext specification_list() throws RecognitionException {
@@ -277,13 +277,13 @@ public class MotorMusicParser extends Parser {
 				}
 				break;
 			case 2:
-				_localctx = new MuultiSpecificationListContext(_localctx);
+				_localctx = new MultiSpecificationListContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(21);
-				((MuultiSpecificationListContext)_localctx).top = specification(0);
+				((MultiSpecificationListContext)_localctx).top = specification(0);
 				setState(22);
-				((MuultiSpecificationListContext)_localctx).rest = specification_list();
+				((MultiSpecificationListContext)_localctx).rest = specification_list();
 				}
 				break;
 			}
@@ -312,6 +312,16 @@ public class MotorMusicParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
+	public static class ParenSeqContext extends SpecificationContext {
+		public Specification_listContext specifications;
+		public TerminalNode LPAREN() { return getToken(MotorMusicParser.LPAREN, 0); }
+		public TerminalNode RPAREN() { return getToken(MotorMusicParser.RPAREN, 0); }
+		public Specification_listContext specification_list() {
+			return getRuleContext(Specification_listContext.class,0);
+		}
+		public ParenSeqContext(SpecificationContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class ConContext extends SpecificationContext {
 		public SpecificationContext top;
 		public Specification_listContext specifications;
@@ -332,16 +342,6 @@ public class MotorMusicParser extends Parser {
 			return getRuleContext(MomentSpecificationContext.class,0);
 		}
 		public MomentContext(SpecificationContext ctx) { copyFrom(ctx); }
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class SeqContext extends SpecificationContext {
-		public Specification_listContext specifications;
-		public TerminalNode LPAREN() { return getToken(MotorMusicParser.LPAREN, 0); }
-		public TerminalNode RPAREN() { return getToken(MotorMusicParser.RPAREN, 0); }
-		public Specification_listContext specification_list() {
-			return getRuleContext(Specification_listContext.class,0);
-		}
-		public SeqContext(SpecificationContext ctx) { copyFrom(ctx); }
 	}
 
 	public final SpecificationContext specification() throws RecognitionException {
@@ -374,13 +374,13 @@ public class MotorMusicParser extends Parser {
 				break;
 			case LPAREN:
 				{
-				_localctx = new SeqContext(_localctx);
+				_localctx = new ParenSeqContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(28);
 				match(LPAREN);
 				setState(29);
-				((SeqContext)_localctx).specifications = specification_list();
+				((ParenSeqContext)_localctx).specifications = specification_list();
 				setState(30);
 				match(RPAREN);
 				}
@@ -455,12 +455,12 @@ public class MotorMusicParser extends Parser {
 		"\u0003\n\u0003\f\u0003+\t\u0003\u0001\u0003\u0000\u0001\u0006\u0004\u0000"+
 		"\u0002\u0004\u0006\u0000\u0000-\u0000\f\u0001\u0000\u0000\u0000\u0002"+
 		"\u0012\u0001\u0000\u0000\u0000\u0004\u0018\u0001\u0000\u0000\u0000\u0006"+
-		" \u0001\u0000\u0000\u0000\b\r\u0005\u0000\u0000\u0001\t\n\u0003\u0006"+
-		"\u0003\u0000\n\u000b\u0005\u0000\u0000\u0001\u000b\r\u0001\u0000\u0000"+
+		" \u0001\u0000\u0000\u0000\b\r\u0005\u0000\u0000\u0001\t\n\u0003\u0004"+
+		"\u0002\u0000\n\u000b\u0005\u0000\u0000\u0001\u000b\r\u0001\u0000\u0000"+
 		"\u0000\f\b\u0001\u0000\u0000\u0000\f\t\u0001\u0000\u0000\u0000\r\u0001"+
-		"\u0001\u0000\u0000\u0000\u000e\u0013\u0005\u0003\u0000\u0000\u000f\u0010"+
-		"\u0005\u0003\u0000\u0000\u0010\u0011\u0005\b\u0000\u0000\u0011\u0013\u0005"+
-		"\u0002\u0000\u0000\u0012\u000e\u0001\u0000\u0000\u0000\u0012\u000f\u0001"+
+		"\u0001\u0000\u0000\u0000\u000e\u0013\u0005\u0002\u0000\u0000\u000f\u0010"+
+		"\u0005\u0002\u0000\u0000\u0010\u0011\u0005\b\u0000\u0000\u0011\u0013\u0005"+
+		"\u0003\u0000\u0000\u0012\u000e\u0001\u0000\u0000\u0000\u0012\u000f\u0001"+
 		"\u0000\u0000\u0000\u0013\u0003\u0001\u0000\u0000\u0000\u0014\u0019\u0003"+
 		"\u0006\u0003\u0000\u0015\u0016\u0003\u0006\u0003\u0000\u0016\u0017\u0003"+
 		"\u0004\u0002\u0000\u0017\u0019\u0001\u0000\u0000\u0000\u0018\u0014\u0001"+
