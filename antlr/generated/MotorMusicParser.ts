@@ -18,8 +18,8 @@ type int = number;
 
 export default class MotorMusicParser extends Parser {
 	public static readonly WS = 1;
-	public static readonly NAMED_SYMBOL = 2;
-	public static readonly NUMBER = 3;
+	public static readonly NUMBER = 2;
+	public static readonly NAMED_SYMBOL = 3;
 	public static readonly LCURLY = 4;
 	public static readonly RCURLY = 5;
 	public static readonly LPAREN = 6;
@@ -37,11 +37,10 @@ export default class MotorMusicParser extends Parser {
                                                             "'('", "')'", 
                                                             "':'" ];
 	public static readonly symbolicNames: (string | null)[] = [ null, "WS", 
-                                                             "NAMED_SYMBOL", 
-                                                             "NUMBER", "LCURLY", 
-                                                             "RCURLY", "LPAREN", 
-                                                             "RPAREN", "COLON", 
-                                                             "UNRECOGNIZED" ];
+                                                             "NUMBER", "NAMED_SYMBOL", 
+                                                             "LCURLY", "RCURLY", 
+                                                             "LPAREN", "RPAREN", 
+                                                             "COLON", "UNRECOGNIZED" ];
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
 		"compilationUnit", "momentSpecification", "specification_list", "specification",
@@ -76,7 +75,7 @@ export default class MotorMusicParser extends Parser {
 				(localctx as EmptyProgramContext)._e = this.match(MotorMusicParser.EOF);
 				}
 				break;
-			case 3:
+			case 2:
 			case 6:
 				localctx = new NonEmptyProgramContext(this, localctx);
 				this.enterOuterAlt(localctx, 2);
@@ -213,7 +212,7 @@ export default class MotorMusicParser extends Parser {
 			this.state = 32;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case 3:
+			case 2:
 				{
 				localctx = new MomentContext(this, localctx);
 				this._ctx = localctx;
@@ -309,7 +308,7 @@ export default class MotorMusicParser extends Parser {
 	1,3,1,3,1,3,5,3,40,8,3,10,3,12,3,43,9,3,1,3,0,1,6,4,0,2,4,6,0,0,45,0,12,
 	1,0,0,0,2,18,1,0,0,0,4,24,1,0,0,0,6,32,1,0,0,0,8,13,5,0,0,1,9,10,3,6,3,
 	0,10,11,5,0,0,1,11,13,1,0,0,0,12,8,1,0,0,0,12,9,1,0,0,0,13,1,1,0,0,0,14,
-	19,5,3,0,0,15,16,5,3,0,0,16,17,5,8,0,0,17,19,5,2,0,0,18,14,1,0,0,0,18,15,
+	19,5,2,0,0,15,16,5,2,0,0,16,17,5,8,0,0,17,19,5,3,0,0,18,14,1,0,0,0,18,15,
 	1,0,0,0,19,3,1,0,0,0,20,25,3,6,3,0,21,22,3,6,3,0,22,23,3,4,2,0,23,25,1,
 	0,0,0,24,20,1,0,0,0,24,21,1,0,0,0,25,5,1,0,0,0,26,27,6,3,-1,0,27,33,3,2,
 	1,0,28,29,5,6,0,0,29,30,3,4,2,0,30,31,5,7,0,0,31,33,1,0,0,0,32,26,1,0,0,
